@@ -185,7 +185,10 @@ Result: ✅ Passed
 ### Software Classification
 
 ![Software Test](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/software_test.png)
-📊 Test Results
+
+
+
+```📊 Test Results
 Test Case	Input Type	Expected Category	Result
 Test Case 1	Laptop Issue	Hardware	✅ Passed
 Test Case 2	Network Issue	Network	✅ Passed
