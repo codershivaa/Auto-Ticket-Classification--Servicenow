@@ -166,16 +166,23 @@ Category: Software
 
 Result: ✅ Passed
 
-📸 Project Screenshots
-Flow Designer
+## 📸 Project Screenshots
 
-The following screenshot shows the configured ServiceNow Flow Designer workflow.
+### Flow Designer
 
-Hardware Classification
+![Project Flow](project_flow.png)
 
-Network Classification
+### Hardware Classification
 
-Software Classification
+![Hardware Test](hardware_test.png)
+
+### Network Classification
+
+![Network Test](network_test.png)
+
+### Software Classification
+
+![Software Test](software_test.png)
 
 📊 Test Results
 Test Case	Input Type	Expected Category	Result
