@@ -170,20 +170,19 @@ Result: ✅ Passed
 
 ### Flow Designer
 
-![Project Flow](project_flow.png)
+![Project Flow](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/project_flow.png)
 
 ### Hardware Classification
 
-![Hardware Test](hardware_test.png)
+![Hardware Test](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/hardware_test.png)
 
 ### Network Classification
 
-![Network Test](network_test.png)
+![Network Test](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/network_test.png)
 
 ### Software Classification
 
-![Software Test](software_test.png)
-
+![Software Test](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/software_test.png)
 📊 Test Results
 Test Case	Input Type	Expected Category	Result
 Test Case 1	Laptop Issue	Hardware	✅ Passed
