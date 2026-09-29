@@ -172,7 +172,7 @@ Result: ✅ Passed
 
 ### Flow Designer
 
-![Projectf Flow](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/project_flow.png)
+![Project Flow](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/projectf_flow.png)
 
 ### Hardware Classification
 
