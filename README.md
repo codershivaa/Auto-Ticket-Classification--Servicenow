@@ -172,7 +172,7 @@ Result: ✅ Passed
 
 ### Flow Designer
 
-![Project Flow](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/project_flow.png)
+![Projectf Flow](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/project_flow.png)
 
 ### Hardware Classification
 
@@ -217,6 +217,8 @@ Add priority assignment based on ticket keywords.
 Implement more advanced classification using ServiceNow Predictive Intelligence.
 Add additional test scenarios.
 Improve classification accuracy using more detailed rules.
+
+
 📚 What I Learned
 
 Through this project, I gained practical experience with:
@@ -230,6 +232,8 @@ Update Record actions
 Automated ticket classification
 Testing and validation of ServiceNow workflows
 GitHub project documentation
+
+
 👥 Team
 
 Project: Auto Ticket Classification using Flow Designer
@@ -239,6 +243,8 @@ Shivam Singh — Team Lead
 Allwin Vincent Raj Tj — Member
 Vikram Singh Gahlot — Member
 Chandan Kumar Singh — Member
+
+
 🏁 Conclusion
 
 The Auto Ticket Classification using Flow Designer project demonstrates how ServiceNow automation can be used to reduce manual effort in IT helpdesk operations.
@@ -246,6 +252,7 @@ The Auto Ticket Classification using Flow Designer project demonstrates how Serv
 By automatically analyzing newly created incident descriptions and assigning appropriate categories, the workflow provides a simple and practical approach to improving ticket classification.
 
 The project was implemented and tested in a ServiceNow Personal Developer Instance (PDI) using Flow Designer.
+
 
 🔗 Project Links
 
