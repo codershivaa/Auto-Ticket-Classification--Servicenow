@@ -526,8 +526,10 @@ Auto-Ticket-Classification--Servicenow/
 
 **Team Lead** - Shivam Singh
 
-**Team Members** - Allwin Vincent Raj Tj - Vikram Singh Gahlot - Chandan
-Kumar Singh
+**Team Members** 
+- Allwin Vincent Raj Tj 
+- Vikram Singh Gahlot
+- ChandanKumar Singh
 
 ------------------------------------------------------------------------
 
