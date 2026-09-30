@@ -1,267 +1,563 @@
-# 🎫 Auto Ticket Classification using ServiceNow Flow Designer
+# 🎫 Auto Ticket Classification using Flow Designer
 
 ## 📌 Project Overview
 
-The **Auto Ticket Classification** project is a ServiceNow automation solution designed to automatically classify newly created IT incident tickets based on keywords in the ticket's short description.
+**Auto Ticket Classification using Flow Designer** is a ServiceNow
+automation project that automatically classifies IT support tickets
+based on the issue described by the user.
 
-In a typical IT helpdesk environment, support staff manually review incoming incidents, identify the issue type, and assign the appropriate category. This process can be time-consuming and may result in inconsistent classification.
+The project reduces manual ticket classification by using **ServiceNow
+Workflow Studio / Flow Designer** to inspect the ticket's short
+description, assign the appropriate category and subcategory, and send
+an automated confirmation email to the caller.
 
-This project uses **ServiceNow Flow Designer** to automate the classification process and reduce manual effort.
+The project also includes a custom **Auto Ticket Classification** table
+with structured fields for storing and managing ticket information.
 
----
+------------------------------------------------------------------------
 
 ## 🎯 Problem Statement
 
-An IT helpdesk receives multiple incident requests every day, such as:
+In a typical IT helpdesk, users submit tickets for problems such as:
 
-- Hardware problems
-- Network connectivity issues
-- Software-related problems
-- Laptop-related issues
+-   Wi-Fi or network issues
+-   Hardware problems
+-   Password reset requests
+-   Slow computer/performance issues
 
-Manually reviewing and categorizing each incident can be inefficient.
+Manually reviewing and categorizing every ticket takes time and can
+result in inconsistent classification.
 
-The objective of this project is to create an automated workflow that analyzes newly created incidents and assigns an appropriate category based on predefined keywords.
+### 💡 Proposed Solution
 
----
+The project uses ServiceNow Flow Designer to:
 
-## 💡 Solution
+1.  Detect a newly created ticket.
+2.  Read the ticket's short description.
+3.  Match the issue against predefined conditions.
+4.  Automatically assign the appropriate category and subcategory.
+5.  Send an email confirmation to the caller.
+6.  Store the ticket information in a structured custom table.
 
-A ServiceNow **Flow Designer** flow is created with the following process:
+------------------------------------------------------------------------
 
-1. A new Incident record is created.
-2. The Flow Designer is automatically triggered.
-3. The flow checks the **Short Description** of the incident.
-4. Keywords are evaluated using conditional logic.
-5. The appropriate Incident Category is automatically assigned.
-6. The classification is stored in the Incident record.
+## Technology Used
 
-### Example
+-   **ServiceNow**
+-   **Workflow Studio / Flow Designer**
+-   **ServiceNow Tables and Dictionary**
+-   **Reference fields**
+-   **Choice fields**
+-   **Dependent fields**
+-   **Automated Email**
+-   **GitHub**
 
-| Keyword / Issue | Automatically Assigned Category |
-|---|---|
-| Laptop | Hardware |
-| Network | Network |
-| Software | Software |
+------------------------------------------------------------------------
 
----
+# Custom Table
 
-## 🛠️ Technologies Used
+A custom table named:
 
-- **ServiceNow**
-- **ServiceNow Personal Developer Instance (PDI)**
-- **Flow Designer**
-- **Incident Management**
-- **Conditional Logic (If / Else If)**
-- **ServiceNow Update Record Action**
-- **GitHub**
+**Auto Ticket Classification**
 
----
+was created to store ticket-related information in a structured format.
 
-## ⚙️ Flow Design
+### Fields
 
-The flow is triggered whenever a new Incident is created.
+  Field               Type          Purpose
+  ------------------- ------------- ------------------------------------
+  Number              Auto Number   Unique ticket identification
+  Caller              Reference     References `sys_user`
+  Category            Choice        Main ticket category
+  Subcategory         Choice        More specific issue classification
+  Short Description   String        Short description of the issue
+  Description         String        Detailed issue description
+  State               Choice        Current ticket state
+  Assigned Group      Reference     References `sys_user_group`
+  Assigned To         Reference     References `sys_user`
 
-### Flow Logic
+### Category Choices
 
-```text
-New Incident Created
-        ↓
-Check Short Description
-        ↓
- ┌──────────────────────────────┐
- │ Contains "Laptop"?           │
- └──────────────────────────────┘
-        ↓ Yes
- Category → Hardware
+-   Network
+-   Hardware
+-   Access
+-   Performance
 
-        ↓ No
- ┌──────────────────────────────┐
- │ Contains "Network"?          │
- └──────────────────────────────┘
-        ↓ Yes
- Category → Network
+### Subcategory Choices
 
-        ↓ No
- ┌──────────────────────────────┐
- │ Contains "Software"?         │
- └──────────────────────────────┘
-        ↓ Yes
- Category → Software
+-   Wi-Fi
+-   Projector
+-   Forgot Password
+-   Slow Computer
 
+### State Choices
 
-🔄 Flow Implementation
+-   New
+-   In Progress
+-   On Hold
+-   Resolved
+-   Closed
 
-The Flow Designer consists of:
+------------------------------------------------------------------------
 
-Trigger
+# Category and Subcategory Dependency
 
-Record Created
+A dependency relationship was configured between **Category** and
+**Subcategory**.
 
-Table:
+The purpose is to make the available subcategory options depend on the
+selected category.
 
-Incident [incident]
-Conditions
+The dependency is configured using the **Subcategory** field's
+Dictionary configuration:
 
-The flow checks the Incident Short Description for specific keywords.
+-   **Use Dependent Field:** True
+-   **Dependent Field:** Category
 
-Examples:
+This provides a structured relationship between the Category and
+Subcategory fields.
 
-Short Description contains "laptop"
-        ↓
-Category = Hardware
-Short Description contains "network"
-        ↓
-Category = Network
-Short Description contains "software"
-        ↓
-Category = Software
-Action
+------------------------------------------------------------------------
 
-The Update Record action is used to update the Incident's Category field.
+# Flow Design
 
-🧪 Testing
+The main flow is named:
 
-The flow was tested using multiple Incident records.
+**Auto Ticket Classification**
 
-Test Case 1 — Hardware Ticket
+The flow is triggered when a new ticket/record is created.
 
-A laptop-related incident was created.
+### Flow Structure
 
-Input:
-
-Short Description: Laptop is not working
-
-Expected Result:
-
-Category: Hardware
-
-Result: ✅ Passed
-
-Test Case 2 — Network Ticket
-
-A network-related incident was created.
-
-Input:
-
-Short Description: Network connection problem
-
-Expected Result:
-
-Category: Network
-
-Result: ✅ Passed
-
-Test Case 3 — Software Ticket
-
-A software-related incident was created.
-
-Input:
-
-Short Description: Software installation issue
-
-Expected Result:
-
-Category: Software
-
-Result: ✅ Passed
-
+``` text
+Trigger: Incident/Ticket Created
+          |
+          v
+   If Wi-Fi OR Network issue
+          |
+          v
+      Update Record
+          |
+          v
+   Else If Projector OR Hardware issue
+          |
+          v
+      Update Record
+          |
+          v
+   Else If Forgot Password issue
+          |
+          v
+      Update Record
+          |
+          v
+   Else If Slow Computer issue
+          |
+          v
+      Update Record
+          |
+          v
+       Send Email
 ```
 
-## 📸 Project Screenshots
+The final flow contains four classification branches followed by an
+automated email action.
 
-### Flow Designer
+------------------------------------------------------------------------
 
-![Project Flow](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/projectf_flow.png)
+# Classification Rules
 
-### Hardware Classification
+  Issue detected in Short Description   Category      Subcategory
+  ------------------------------------- ------------- -----------------
+  Wi-Fi / Network                       Network       Wi-Fi
+  Projector / Hardware                  Hardware      Projector
+  Forgot Password                       Access        Forgot Password
+  Slow Computer                         Performance   Slow Computer
 
-![Hardware Test](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/hardware_test.png)
+These rules allow the flow to classify common IT support requests
+automatically.
 
-### Network Classification
+------------------------------------------------------------------------
 
-![Network Test](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/network_test.png)
+# Flow Conditions
 
-### Software Classification
+## 1. Wi-Fi / Network Issue
 
-![Software Test](https://raw.githubusercontent.com/codershivaa/Auto-Ticket-Classification--Servicenow/main/software_test.png)
+The first condition checks whether the short description contains a
+Wi-Fi or network-related issue.
 
+If the condition evaluates to **True**, the corresponding Update Record
+action runs.
 
+**Result:**
 
-```📊 Test Results
-Test Case	Input Type	Expected Category	Result
-Test Case 1	Laptop Issue	Hardware	✅ Passed
-Test Case 2	Network Issue	Network	✅ Passed
-Test Case 3	Software Issue	Software	✅ Passed
+`Category = Network`
 
-All implemented test scenarios successfully produced the expected category.
+`Subcategory = Wi-Fi`
 
-🔐 Project Scope
+The Network test successfully evaluated the first condition as **True**,
+completed the Update Record action, and then completed the Send Email
+action.
 
-This project demonstrates automated ticket classification using ServiceNow Flow Designer.
+------------------------------------------------------------------------
 
-The current implementation focuses on keyword-based classification using the Incident Short Description.
+## 2. Projector / Hardware Issue
 
-The project can be extended to support more advanced classification rules and additional incident categories.
+The second branch checks for projector or hardware-related issues.
 
-🚀 Future Enhancements
+If the condition evaluates to **True**, the corresponding Update Record
+action runs.
+
+**Result:**
+
+`Category = Hardware`
+
+`Subcategory = Projector`
+
+The Hardware test successfully evaluated this branch as **True**,
+completed the Update Record action, and completed the Send Email action.
+
+------------------------------------------------------------------------
+
+## 3. Forgot Password Issue
+
+The third branch checks whether the short description contains a
+password-reset/forgot-password issue.
+
+If the condition evaluates to **True**, the corresponding Update Record
+action runs.
+
+**Result:**
+
+`Category = Access`
+
+`Subcategory = Forgot Password`
+
+The Forgot Password test successfully evaluated this branch as **True**,
+completed the Update Record action, and completed the Send Email action.
+
+------------------------------------------------------------------------
+
+## 4. Slow Computer Issue
+
+The fourth branch checks whether the short description contains a
+slow-computer/performance issue.
+
+If the condition evaluates to **True**, the corresponding Update Record
+action runs.
+
+**Result:**
+
+`Category = Performance`
+
+`Subcategory = Slow Computer`
+
+The Slow Computer test successfully evaluated this branch as **True**,
+completed the Update Record action, and completed the Send Email action.
+
+------------------------------------------------------------------------
+
+# Automated Email Notification
+
+After the classification branches, the flow executes a **Send Email**
+action.
+
+The email is sent to the caller's email address using the reference:
+
+``` text
+Trigger → Record → Caller → Email
+```
+
+### Email Subject
+
+**Your Request for the issue has been Submitted**
+
+### Email Body
+
+``` text
+Hello,
+
+It is your ticket confirmation message.
+
+Thank you,
+IT Support Team
+```
+
+The Send Email action was successfully executed during testing.
+
+The ServiceNow email record also confirms that the email was generated
+and contains the expected message content.
+
+------------------------------------------------------------------------
+
+# Testing and Validation
+
+The flow was tested using different ticket scenarios.
+
+## Test Case 1 --- Network
+
+**Input:** Network / Wi-Fi issue
+
+**Expected:**
+
+-   Category → Network
+-   Subcategory → Wi-Fi
+-   Email → Sent
+
+**Result:** ✅ Passed
+
+The execution log shows:
+
+-   Network condition → **Evaluated - True**
+-   Update Record → **Completed**
+-   Send Email → **Completed**
+
+------------------------------------------------------------------------
+
+## Test Case 2 --- Hardware
+
+**Input:** Projector / Hardware issue
+
+**Expected:**
+
+-   Category → Hardware
+-   Subcategory → Projector
+-   Email → Sent
+
+**Result:** ✅ Passed
+
+The execution log shows:
+
+-   Hardware condition → **Evaluated - True**
+-   Update Record → **Completed**
+-   Send Email → **Completed**
+
+------------------------------------------------------------------------
+
+## Test Case 3 --- Forgot Password
+
+**Input:** Forgot Password issue
+
+**Expected:**
+
+-   Category → Access
+-   Subcategory → Forgot Password
+-   Email → Sent
+
+**Result:** ✅ Passed
+
+The execution log shows:
+
+-   Forgot Password condition → **Evaluated - True**
+-   Update Record → **Completed**
+-   Send Email → **Completed**
+
+------------------------------------------------------------------------
+
+## Test Case 4 --- Slow Computer
+
+**Input:** Slow Computer issue
+
+**Expected:**
+
+-   Category → Performance
+-   Subcategory → Slow Computer
+-   Email → Sent
+
+**Result:** ✅ Passed
+
+The execution log shows:
+
+-   Slow Computer condition → **Evaluated - True**
+-   Update Record → **Completed**
+-   Send Email → **Completed**
+
+------------------------------------------------------------------------
+
+# Test Execution Summary
+
+  Test Case   Condition              Category      Subcategory       Email   Status
+  ----------- ---------------------- ------------- ----------------- ------- -----------
+  1           Wi-Fi / Network        Network       Wi-Fi             Sent    ✅ Passed
+  2           Projector / Hardware   Hardware      Projector         Sent    ✅ Passed
+  3           Forgot Password        Access        Forgot Password   Sent    ✅ Passed
+  4           Slow Computer          Performance   Slow Computer     Sent    ✅ Passed
+
+All four classification scenarios were successfully tested.
+
+------------------------------------------------------------------------
+
+# Project Screenshots
+
+> Place the provided screenshots in a `screenshots` folder using the
+> filenames below.
+
+### Flow Design
+
+![Auto Ticket Classification
+Flow](screenshots/Auto_Ticket_Classification.png)
+
+### Network Test
+
+![Network Test](screenshots/network_test.png)
+
+### Hardware Test
+
+![Hardware Test](screenshots/hardware_test.png)
+
+### Forgot Password Test
+
+![Forgot Password Test](screenshots/forgot_password_test.png)
+
+### Slow Computer Test
+
+![Slow Computer Test](screenshots/slow_computer_test.png)
+
+### Email Notification
+
+![Sent Email Check](screenshots/Sent_email_check.png)
+
+------------------------------------------------------------------------
+
+# Key Features
+
+-   ✅ Automated ticket classification
+-   ✅ Network issue classification
+-   ✅ Hardware issue classification
+-   ✅ Password reset classification
+-   ✅ Performance/slow computer classification
+-   ✅ Category and Subcategory fields
+-   ✅ Category--Subcategory dependency
+-   ✅ Structured custom ticket table
+-   ✅ Reference fields for Caller, Assigned Group, and Assigned To
+-   ✅ Choice fields for Category, Subcategory, and State
+-   ✅ Automated email notification
+-   ✅ Flow execution testing
+-   ✅ GitHub project documentation
+
+------------------------------------------------------------------------
+
+# Project Benefits
+
+### Reduced Manual Work
+
+Tickets can be classified automatically instead of requiring manual
+categorization for every request.
+
+### Consistent Classification
+
+Predefined rules provide a consistent classification structure.
+
+### Faster Ticket Processing
+
+The appropriate category and subcategory can be assigned immediately
+after ticket creation.
+
+### Automated Communication
+
+The caller receives an automated confirmation email after the ticket is
+processed.
+
+### Structured Data
+
+The custom table provides a standardized structure for storing ticket
+information.
+
+### Easy Maintenance
+
+Additional classification rules can be added to the flow as new IT
+support scenarios are introduced.
+
+------------------------------------------------------------------------
+
+# Future Enhancements
 
 Possible future improvements include:
 
-Add more ticket categories and keywords.
-Implement Subcategory classification.
-Use both Short Description and Description fields.
-Automatically assign incidents to appropriate support groups.
-Add automated email notifications.
-Add priority assignment based on ticket keywords.
-Implement more advanced classification using ServiceNow Predictive Intelligence.
-Add additional test scenarios.
-Improve classification accuracy using more detailed rules.
+-   More IT issue categories and subcategories
+-   Assignment of tickets to specific support groups
+-   Priority calculation based on issue type
+-   SLA automation
+-   Automatic assignment of technicians
+-   Dashboard and reporting
+-   More advanced text-based classification
+-   Integration with additional notification channels
 
+------------------------------------------------------------------------
 
-📚 What I Learned
+# What I Learned
 
-Through this project, I gained practical experience with:
+Through this project, I learned how to:
 
-ServiceNow Personal Developer Instance
-Incident Management
-Flow Designer
-Record-based triggers
-Conditional logic
-Update Record actions
-Automated ticket classification
-Testing and validation of ServiceNow workflows
-GitHub project documentation
+-   Create and configure ServiceNow tables
+-   Create fields with different data types
+-   Configure Reference fields
+-   Configure Choice fields
+-   Create Category and Subcategory relationships
+-   Configure dependent fields
+-   Build automation using Flow Designer
+-   Use conditions and Else If branches
+-   Update records automatically
+-   Configure automated email notifications
+-   Test Flow Designer executions
+-   Analyze execution results
+-   Document a ServiceNow project using GitHub
 
+------------------------------------------------------------------------
 
-👥 Team
+# Project Structure
 
-Project: Auto Ticket Classification using Flow Designer
+``` text
+Auto-Ticket-Classification--Servicenow/
+│
+├── README.md
+├── screenshots/
+│   ├── Auto_Ticket_Classification.png
+│   ├── network_test.png
+│   ├── hardware_test.png
+│   ├── forgot_password_test.png
+│   ├── slow_computer_test.png
+│   └── Sent_email_check.png
+│
+└── ServiceNow Flow Designer Configuration
+```
 
-Team Members
-Shivam Singh — Team Lead
-Allwin Vincent Raj Tj — Member
-Vikram Singh Gahlot — Member
-Chandan Kumar Singh — Member
+------------------------------------------------------------------------
 
+# Team
 
-🏁 Conclusion
+**Team Lead** - Shivam Singh
 
-The Auto Ticket Classification using Flow Designer project demonstrates how ServiceNow automation can be used to reduce manual effort in IT helpdesk operations.
+**Team Members** - Allwin Vincent Raj Tj - Vikram Singh Gahlot - Chandan
+Kumar Singh
 
-By automatically analyzing newly created incident descriptions and assigning appropriate categories, the workflow provides a simple and practical approach to improving ticket classification.
+------------------------------------------------------------------------
 
-The project was implemented and tested in a ServiceNow Personal Developer Instance (PDI) using Flow Designer.
+# GitHub Repository
 
+**Repository:** `codershivaa/Auto-Ticket-Classification--Servicenow`
 
-🔗 Project Links
+------------------------------------------------------------------------
 
-GitHub Repository:
-https://github.com/codershivaa/Auto-Ticket-Classification--Servicenow/
+# Project Status
 
-ServiceNow:
-The working implementation is hosted in a ServiceNow Personal Developer Instance (PDI).
+**Status: Completed and Tested ✅**
 
-⚠️ ServiceNow instance credentials and private access details are not included in this repository.
+The project flow, classification conditions, record updates,
+category/subcategory configuration, dependent-field configuration, and
+email notification have been implemented and tested successfully.
 
-⭐ Project Status: Completed and Tested
+The four main test scenarios --- **Network, Hardware, Forgot Password,
+and Slow Computer** --- completed successfully in Workflow Studio.
+
+------------------------------------------------------------------------
+
+## Conclusion
+
+The **Auto Ticket Classification using Flow Designer** project
+demonstrates how ServiceNow can automate a common IT helpdesk process.
+
+By combining structured ticket fields, dependent Category/Subcategory
+selection, Flow Designer conditions, automatic record updates, and email
+notifications, the system provides a standardized workflow for handling
+common IT support requests.
