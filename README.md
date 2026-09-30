@@ -389,13 +389,11 @@ All four classification scenarios were successfully tested.
 
 # Project Screenshots
 
-> Place the provided screenshots in a `screenshots` folder using the
-> filenames below.
 
 ### Flow Design
 
 ![Auto Ticket Classification
-Flow](screenshots/Auto_Ticket_Classification.png)
+Flow](screenshots/Auto Ticket Classification.png)
 
 ### Network Test
 
@@ -415,7 +413,7 @@ Flow](screenshots/Auto_Ticket_Classification.png)
 
 ### Email Notification
 
-![Sent Email Check](screenshots/Sent_email_check.png)
+![Sent Email Check](screenshots/Sent _email_check.png)
 
 ------------------------------------------------------------------------
 
