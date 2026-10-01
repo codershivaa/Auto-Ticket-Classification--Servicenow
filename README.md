@@ -416,6 +416,11 @@ Flow](screenshots/Auto_Ticket_Classification.png)
 ![Sent Email Check](screenshots/Sent_email_check.png)
 
 ------------------------------------------------------------------------
+## 🎥 Project Demo
+
+Watch the complete project demonstration and explanation on YouTube:
+
+[▶️ Watch the Auto Ticket Classification Project Demo](https://youtu.be/qa7YG0Gyn_g)
 
 # Key Features
 
